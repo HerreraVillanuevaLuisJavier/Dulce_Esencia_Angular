@@ -1,0 +1,54 @@
+<section class="seccion pagina-interna">
+  <div class="contenedor login-shell">
+    <div class="login-card">
+      <div class="login-hero">
+        <p class="etiqueta-seccion">Acceso a clientes</p>
+        <h2>Inicia sesión</h2>
+        <p>Usa las credenciales de demostración para acceder a tu cuenta de prueba.</p>
+      </div>
+
+      <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
+        <div class="campo-formulario">
+          <label for="login-email">Correo electrónico</label>
+          <input id="login-email" name="email" type="email" [(ngModel)]="email" required email />
+          @if (loginForm.submitted && !email) {
+            <small class="form-error">El correo es obligatorio.</small>
+          }
+        </div>
+
+        <div class="campo-formulario">
+          <label for="login-password">Contraseña</label>
+          <div class="password-wrap">
+            <input
+              id="login-password"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              required
+            />
+            <button class="password-toggle" type="button" (click)="showPassword = !showPassword">
+              {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+          @if (loginForm.submitted && !password) {
+            <small class="form-error">La contraseña es obligatoria.</small>
+          }
+        </div>
+
+        @if (errorMessage) {
+          <div class="message error-message">{{ errorMessage }}</div>
+        }
+
+        <button class="boton boton-principal w-100" type="submit">Iniciar sesión</button>
+
+        <div class="login-meta">
+          <p>Credenciales demo:</p>
+          <p><strong>Usuario:</strong> cliente@dulceesencia.com</p>
+          <p><strong>Contraseña:</strong> Dulce123!</p>
+        </div>
+
+        <a class="text-link" routerLink="/">Volver al Home</a>
+      </form>
+    </div>
+  </div>
+</section>

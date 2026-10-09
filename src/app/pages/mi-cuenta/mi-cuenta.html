@@ -1,0 +1,22 @@
+<section class="seccion pagina-interna">
+  <div class="contenedor">
+    <div class="card-usuario">
+      <p class="etiqueta-seccion">Mi cuenta</p>
+      @if (authService.isAuthenticated()) {
+        <h2>Bienvenido, {{ authService.currentUser()?.name }}</h2>
+        <p>Tu sesión está activa y puedes acceder al panel administrativo.</p>
+        <div class="mi-cuenta-actions">
+          <a class="boton boton-principal" routerLink="/dashboard">Ir al dashboard</a>
+          <a class="boton boton-secundario" routerLink="/">Volver al inicio</a>
+        </div>
+      } @else {
+        <h2>Inicia sesión para continuar</h2>
+        <p>Accede a tu cuenta de Dulce Esencia y revisa tus pedidos.</p>
+        <div class="mi-cuenta-actions">
+          <a class="boton boton-principal" routerLink="/login">Iniciar sesión</a>
+          <a class="boton boton-secundario" routerLink="/">Volver al inicio</a>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+<section class="seccion seccion-pedido pagina-interna">
+  <div class="contenedor">
+    <div class="encabezado-seccion">
+      <div>
+        <p class="etiqueta-seccion">Compra con estilo</p>
+        <h2>Tienda Dulce Esencia</h2>
+      </div>
+      <p class="texto-seccion">Prepara tus pedidos con una selección pensada para momentos especiales.</p>
+    </div>
+
+    <div class="tienda-grid">
+      <div class="pedido-resumen">
+        <h3>Elegidos para ti</h3>
+        @for (producto of productos; track producto.nombre) {
+          <div class="resumen-item">
+            <img class="resumen-producto-imagen" [src]="producto.imagen" [alt]="producto.nombre" />
+            <div>
+              <strong>{{ producto.nombre }}</strong>
+              <p>{{ producto.descripcion }}</p>
+            </div>
+            <span>{{ producto.precio }}</span>
+          </div>
+        }
+      </div>
+
+      <form class="formulario-pedido">
+        <div class="campo-formulario">
+          <label for="store-nombre">Nombre</label>
+          <input id="store-nombre" type="text" placeholder="Tu nombre" />
+        </div>
+        <div class="campo-formulario">
+          <label for="store-email">Correo</label>
+          <input id="store-email" type="email" placeholder="tu@email.com" />
+        </div>
+        <div class="campo-formulario">
+          <label for="store-producto">Producto</label>
+          <select id="store-producto">
+            <option value="">Selecciona un producto</option>
+            <option value="torta-cumpleanos">Torta de cumpleaños</option>
+            <option value="cupcake-sampler">Cupcake sampler</option>
+            <option value="box-postres">Box de postres</option>
+          </select>
+        </div>
+        <div class="fila-formulario">
+          <div class="campo-formulario">
+            <label for="store-cantidad">Cantidad</label>
+            <input id="store-cantidad" type="number" min="1" value="1" />
+          </div>
+          <div class="campo-formulario">
+            <label for="store-tipo">Tipo</label>
+            <select id="store-tipo">
+              <option value="">Selecciona</option>
+              <option value="recojo">Recojo</option>
+              <option value="delivery">Delivery</option>
+            </select>
+          </div>
+        </div>
+        <button class="boton boton-principal boton-formulario" type="button">Reservar pedido</button>
+      </form>
+    </div>
+  </div>
+</section>

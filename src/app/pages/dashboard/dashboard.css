@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.dashboard-wrap {
+  display: grid;
+  gap: 22px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dashboard-card {
+  padding: 26px 28px;
+  border: 1px solid rgba(109, 64, 54, 0.12);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #f8f1e8, #fffdf9);
+  box-shadow: 0 12px 32px rgba(77, 45, 38, 0.08);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.dashboard-stat {
+  padding: 28px 22px;
+  border-radius: 18px;
+  background: #fffdf9;
+  border: 1px solid rgba(109, 64, 54, 0.12);
+  box-shadow: 0 12px 32px rgba(77, 45, 38, 0.08);
+}
+
+.dashboard-stat span,
+.dashboard-stat small {
+  display: block;
+  color: #806e67;
+}
+
+.dashboard-stat strong {
+  display: block;
+  margin: 12px 0 6px;
+  color: #6d4036;
+  font-size: clamp(2rem, 5vw, 3rem);
+}

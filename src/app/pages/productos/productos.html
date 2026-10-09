@@ -1,0 +1,28 @@
+<section class="seccion seccion-productos pagina-interna">
+  <div class="contenedor">
+    <div class="encabezado-seccion">
+      <div>
+        <p class="etiqueta-seccion">Pequeños placeres</p>
+        <h2>Nuestro catálogo</h2>
+      </div>
+      <p class="texto-seccion">Pasteles, cupcakes y elementos artesanales pensados para cada ocasión especial.</p>
+    </div>
+
+    <div class="rejilla-productos">
+      @for (producto of productos; track producto.nombre) {
+        <article class="tarjeta-producto">
+          <div class="imagen-producto" aria-hidden="true">
+            <img [src]="producto.imagen" [alt]="producto.nombre" class="product-image" />
+          </div>
+          <div class="contenido-producto">
+            <span class="categoria-producto">{{ producto.categoria }}</span>
+            <h3>{{ producto.nombre }}</h3>
+            <p>{{ producto.descripcion }}</p>
+            <span class="precio-producto">{{ producto.precio }}</span>
+            <button class="boton boton-secundario boton-producto" type="button">Elegir producto</button>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

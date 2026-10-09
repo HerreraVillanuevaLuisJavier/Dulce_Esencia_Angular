@@ -1,0 +1,220 @@
+<section id="inicio" class="hero">
+  <div class="contenedor hero-contenido">
+    <div class="hero-texto">
+      <p class="etiqueta-seccion">Pastelería artesanal</p>
+      <h1>Endulzamos tus momentos</h1>
+      <p class="hero-descripcion">Pastelería artesanal preparada con dedicación para convertir cada ocasión en un momento especial.</p>
+      <div class="hero-acciones">
+        <a class="boton boton-principal" routerLink="/productos">Ver nuestros productos</a>
+        <a class="boton boton-secundario" routerLink="/tienda">Hacer un pedido</a>
+      </div>
+    </div>
+    <div class="hero-imagen espacio-imagen">
+      <img src="/images/banner.jpg" alt="Pastelería artesanal Dulce Esencia" class="hero-image" />
+      
+    </div>
+  </div>
+</section>
+
+<section id="nosotros" class="seccion seccion-nosotros">
+  <div class="contenedor bloque-nosotros">
+    <div class="nosotros-imagen espacio-imagen">
+      <img src="/images/Nosotros_Dulce_Esencia.png" alt="Nosotros Dulce Esencia" class="nosotros-image" />
+      
+    </div>
+    <div class="nosotros-contenido">
+      <p class="etiqueta-seccion">Nuestra esencia</p>
+      <h2>Sobre Dulce Esencia</h2>
+      <p>En Dulce Esencia creemos que cada celebración merece un toque especial. Elaboramos tortas, cupcakes y postres artesanales utilizando ingredientes seleccionados y cuidando cada detalle.</p>
+      <div class="caracteristicas">
+        <article class="caracteristica">
+          <span class="caracteristica-numero">01</span>
+          <h3>Ingredientes seleccionados</h3>
+          <p>Elegimos cada ingrediente pensando en el sabor y la calidad.</p>
+        </article>
+        <article class="caracteristica">
+          <span class="caracteristica-numero">02</span>
+          <h3>Elaboración artesanal</h3>
+          <p>Preparamos cada creación con calma, cuidado y dedicación.</p>
+        </article>
+        <article class="caracteristica">
+          <span class="caracteristica-numero">03</span>
+          <h3>Pedidos personalizados</h3>
+          <p>Hacemos realidad una propuesta dulce hecha para ti.</p>
+        </article>
+      </div>
+      <div class="nosotros-galeria">
+        <img src="/images/equipo-nosotros.jpg" alt="Equipo de Dulce Esencia" class="nosotros-equipo" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="productos" class="seccion seccion-productos">
+  <div class="contenedor">
+    <div class="encabezado-seccion">
+      <div>
+        <p class="etiqueta-seccion">Pequeños placeres</p>
+        <h2>Nuestros productos</h2>
+      </div>
+      <p class="texto-seccion">Recetas artesanales para compartir, celebrar y regalar un instante delicioso.</p>
+    </div>
+    <div class="rejilla-productos">
+      @for (producto of productos; track producto.id) {
+        <article class="tarjeta-producto">
+          <div class="imagen-producto" aria-hidden="true">
+            <img [src]="producto.imagen" [alt]="producto.nombre" class="product-image" />
+          </div>
+          <div class="contenido-producto">
+            <span class="categoria-producto">{{ producto.categoria }}</span>
+            <h3>{{ producto.nombre }}</h3>
+            <p>{{ producto.descripcion }}</p>
+            <span class="precio-producto">{{ producto.precio }}</span>
+            <button class="boton boton-secundario boton-producto" type="button">Elegir producto</button>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section id="promociones" class="seccion seccion-promociones">
+  <div class="contenedor">
+    <div class="encabezado-seccion encabezado-claro">
+      <div>
+        <p class="etiqueta-seccion">Para celebrar más</p>
+        <h2>Promociones especiales</h2>
+      </div>
+      <p class="texto-seccion">Detalles pensados para que cada antojo tenga una buena excusa.</p>
+    </div>
+    <div class="rejilla-promociones">
+      <article class="tarjeta-promocion promocion-destacada">
+        <img src="/images/torta-principal.jpeg" alt="Torta destacada de Dulce Esencia" class="promotion-image" />
+        <span class="promocion-numero">01</span>
+        <h3>10% de descuento en tortas</h3>
+        <p>Haz que tu celebración sea aún más especial.</p>
+        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="tarjeta-promocion">
+        <img src="/images/cupcakes-chocolate.jpg" alt="Cupcakes de chocolate para la promoción 2x1" class="promotion-image" />
+        <span class="promocion-numero">02</span>
+        <h3>2x1 en cupcakes</h3>
+        <p>Un detalle para compartir se disfruta el doble.</p>
+        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="tarjeta-promocion">
+        <img src="/images/productos.jpg" alt="Selección de postres para el box dulce de la semana" class="promotion-image" />
+        <span class="promocion-numero">03</span>
+        <h3>Box dulce de la semana</h3>
+        <p>Una selección sorpresa para endulzar tus días.</p>
+        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="pedido" class="seccion seccion-pedido">
+  <div class="contenedor pedido-contenido">
+    <div class="pedido-introduccion">
+      <p class="etiqueta-seccion">Hecho para ti</p>
+      <h2>Haz tu pedido</h2>
+      <p>Cuéntanos qué deseas y prepara tu pedido con Dulce Esencia.</p>
+      <div class="nota-pedido">
+        <span aria-hidden="true">✧</span>
+        <p>Cuéntanos tu idea. Nosotros ponemos el toque dulce.</p>
+      </div>
+    </div>
+    <form class="formulario-pedido">
+      <div class="campo-formulario">
+        <label for="nombreCliente">Nombre del cliente</label>
+        <input type="text" id="nombreCliente" name="nombreCliente" placeholder="Tu nombre" autocomplete="name" />
+      </div>
+      <div class="campo-formulario">
+        <label for="correoCliente">Correo electrónico</label>
+        <input type="email" id="correoCliente" name="correoCliente" placeholder="tu@email.com" autocomplete="email" />
+      </div>
+      <div class="campo-formulario">
+        <label for="productoSeleccionado">Producto</label>
+        <select id="productoSeleccionado" name="productoSeleccionado">
+          <option value="">Selecciona un producto</option>
+          <option value="torta-chocolate">Torta de chocolate</option>
+          <option value="torta-vainilla">Torta de vainilla</option>
+          <option value="cheesecake-frutos-rojos">Cheesecake de frutos rojos</option>
+          <option value="cupcakes-chocolate">Cupcakes de chocolate</option>
+          <option value="cupcakes-vainilla">Cupcakes de vainilla</option>
+          <option value="box-dulce">Box dulce especial</option>
+        </select>
+      </div>
+      <div class="fila-formulario">
+        <div class="campo-formulario">
+          <label for="cantidadProducto">Cantidad</label>
+          <input type="number" id="cantidadProducto" name="cantidadProducto" min="1" value="1" />
+        </div>
+        <div class="campo-formulario">
+          <label for="tipoPedido">Tipo de pedido</label>
+          <select id="tipoPedido" name="tipoPedido">
+            <option value="">Selecciona una opción</option>
+            <option value="recojo">Recojo en tienda</option>
+            <option value="delivery">Delivery</option>
+          </select>
+        </div>
+      </div>
+      <button class="boton boton-principal boton-formulario" type="button">Enviar pedido</button>
+      <p class="mensaje-pedido" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<section id="testimonios" class="seccion seccion-testimonios">
+  <div class="contenedor">
+    <div class="encabezado-seccion centrado">
+      <p class="etiqueta-seccion">Palabras que nos inspiran</p>
+      <h2>Lo que dicen nuestros clientes</h2>
+    </div>
+    <div class="rejilla-testimonios">
+      <article class="tarjeta-testimonio">
+        <div class="estrellas" aria-label="5 de 5 estrellas">★★★★★</div>
+        <blockquote>“El cheesecake estuvo delicioso y la presentación fue hermosa.”</blockquote>
+        <p class="nombre-testimonio">Mariana R.</p>
+      </article>
+      <article class="tarjeta-testimonio">
+        <div class="estrellas" aria-label="5 de 5 estrellas">★★★★★</div>
+        <blockquote>“Pedí una torta personalizada y quedó exactamente como la imaginaba.”</blockquote>
+        <p class="nombre-testimonio">Carla M.</p>
+      </article>
+      <article class="tarjeta-testimonio">
+        <div class="estrellas" aria-label="5 de 5 estrellas">★★★★★</div>
+        <blockquote>“Los cupcakes fueron perfectos para nuestra celebración.”</blockquote>
+        <p class="nombre-testimonio">Diego P.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" class="seccion seccion-contacto">
+  <div class="contenedor contacto-contenido">
+    <div>
+      <p class="etiqueta-seccion">Visítanos</p>
+      <h2>Hablemos de algo dulce</h2>
+      <p class="contacto-introduccion">Estamos listos para acompañar tus celebraciones y convertir tus ideas en deliciosos recuerdos.</p>
+    </div>
+    <address class="datos-contacto">
+      <div class="dato-contacto">
+        <span class="dato-icono" aria-hidden="true">☎</span>
+        <div><span>Teléfono</span><a href="tel:+51999999999">+51 999 999 999</a></div>
+      </div>
+      <div class="dato-contacto">
+        <span class="dato-icono" aria-hidden="true">@</span>
+        <div><span>Correo</span><a href="mailto:contacto@dulceesencia.pe">contacto@dulceesencia.pe</a></div>
+      </div>
+      <div class="dato-contacto">
+        <span class="dato-icono" aria-hidden="true">⌖</span>
+        <div><span>Dirección</span><p>Av. Dulce Esencia 123, Lima</p></div>
+      </div>
+      <div class="dato-contacto">
+        <span class="dato-icono" aria-hidden="true">◷</span>
+        <div><span>Horario</span><p>Lunes a sábado<br>9:00 a.m. - 8:00 p.m.</p></div>
+      </div>
+    </address>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.tienda-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.pedido-resumen {
+  padding: 32px;
+  border: 1px solid rgba(109, 64, 54, 0.12);
+  border-radius: 18px;
+  background: #fffdf9;
+  box-shadow: 0 12px 32px rgba(77, 45, 38, 0.08);
+}
+
+.pedido-resumen h3 {
+  margin-bottom: 20px;
+}
+
+.resumen-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(109, 64, 54, 0.12);
+}
+
+.resumen-item:last-child {
+  border-bottom: none;
+}
+
+.resumen-item p {
+  margin: 8px 0 0;
+  color: #806e67;
+  font-size: 14px;
+}
+
+.resumen-item span {
+  color: #6d4036;
+  font-weight: 700;
+}

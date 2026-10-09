@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+.login-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.login-card {
+  width: min(100%, 560px);
+  padding: 40px 34px;
+  border: 1px solid rgba(109, 64, 54, 0.12);
+  border-radius: 24px;
+  background: #fffdf9;
+  box-shadow: 0 12px 32px rgba(77, 45, 38, 0.08);
+}
+
+.login-hero {
+  margin-bottom: 24px;
+}
+
+.login-form {
+  display: grid;
+  gap: 18px;
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 100px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 8px;
+  background: rgba(109, 64, 54, 0.08);
+  color: #6d4036;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+}
+
+.message {
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.error-message {
+  border-left: 3px solid #d26c6c;
+  background: rgba(210, 108, 108, 0.08);
+  color: #7b2d2d;
+}
+
+.form-error {
+  color: #8d3b3b;
+}
+
+.login-meta {
+  margin-top: 6px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f8f1e8;
+  color: #55423d;
+}
+
+.login-meta p {
+  margin: 0;
+}
+
+.text-link {
+  color: #6d4036;
+  font-weight: 700;
+}

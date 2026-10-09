@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.not-found-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.not-found-card {
+  max-width: 640px;
+  padding: 40px 32px;
+  border-radius: 18px;
+  border: 1px solid rgba(109, 64, 54, 0.12);
+  background: #fffdf9;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(77, 45, 38, 0.08);
+}

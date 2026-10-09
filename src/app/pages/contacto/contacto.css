@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.contacto-form-wrap {
+  width: 100%;
+}
+
+.formulario-contacto {
+  width: 100%;
+}
+
+.formulario-contacto textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.datos-contacto-page {
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  color: inherit;
+}

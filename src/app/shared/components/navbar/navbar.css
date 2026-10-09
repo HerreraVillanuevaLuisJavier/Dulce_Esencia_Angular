@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.boton-nav {
+  min-height: 40px;
+  padding: 9px 18px;
+  font-size: 12px;
+}
+
+.active-link {
+  color: #e7b9b3;
+}
