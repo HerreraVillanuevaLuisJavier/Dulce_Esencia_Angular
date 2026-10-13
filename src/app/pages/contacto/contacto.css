@@ -15,7 +15,37 @@
   min-height: 120px;
 }
 
+.formulario-error {
+  color: #8d3b3b;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+.formulario-contacto input[aria-invalid='true'],
+.formulario-contacto textarea[aria-invalid='true'] {
+  border-color: #b85c5c;
+}
+
+.confirmacion-contacto {
+  grid-column: 1 / -1;
+  margin: 16px 0 0;
+  padding: 16px 18px;
+  border-left: 3px solid var(--color-verde);
+  border-radius: 0 8px 8px 0;
+  color: var(--color-marron-oscuro);
+  background: rgba(97, 120, 106, 0.1);
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
 .datos-contacto-page {
   grid-template-columns: repeat(2, minmax(180px, 1fr));
   color: inherit;
+}
+
+@media (max-width: 650px) {
+  .datos-contacto-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

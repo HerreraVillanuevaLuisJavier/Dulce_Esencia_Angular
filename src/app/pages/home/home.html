@@ -5,8 +5,8 @@
       <h1>Endulzamos tus momentos</h1>
       <p class="hero-descripcion">Pastelería artesanal preparada con dedicación para convertir cada ocasión en un momento especial.</p>
       <div class="hero-acciones">
-        <a class="boton boton-principal" routerLink="/productos">Ver nuestros productos</a>
-        <a class="boton boton-secundario" routerLink="/tienda">Hacer un pedido</a>
+        <a class="btn boton boton-principal" routerLink="/productos">Ver nuestros productos</a>
+        <a class="btn boton boton-secundario" routerLink="/tienda">Hacer un pedido</a>
       </div>
     </div>
     <div class="hero-imagen espacio-imagen">
@@ -59,21 +59,41 @@
       </div>
       <p class="texto-seccion">Recetas artesanales para compartir, celebrar y regalar un instante delicioso.</p>
     </div>
-    <div class="rejilla-productos">
-      @for (producto of productos; track producto.id) {
-        <article class="tarjeta-producto">
-          <div class="imagen-producto" aria-hidden="true">
-            <img [src]="producto.imagen" [alt]="producto.nombre" class="product-image" />
-          </div>
-          <div class="contenido-producto">
-            <span class="categoria-producto">{{ producto.categoria }}</span>
-            <h3>{{ producto.nombre }}</h3>
-            <p>{{ producto.descripcion }}</p>
-            <span class="precio-producto">{{ producto.precio }}</span>
-            <button class="boton boton-secundario boton-producto" type="button">Elegir producto</button>
-          </div>
-        </article>
-      }
+    <div *ngIf="cargandoProductos" class="home-catalog-message" role="status" aria-live="polite">
+      Cargando productos destacados...
+    </div>
+    <div *ngIf="!cargandoProductos && errorProductos" class="home-catalog-message home-catalog-error" role="alert">
+      <p>{{ errorProductos }}</p>
+      <button class="btn boton boton-secundario" type="button" (click)="cargarProductos()">Reintentar</button>
+    </div>
+    <div *ngIf="!cargandoProductos && !errorProductos && productos.length === 0" class="home-catalog-message">
+      El catálogo todavía no tiene productos disponibles.
+    </div>
+    <div *ngIf="!cargandoProductos && !errorProductos && productos.length > 0 && productosDestacados.length === 0" class="home-catalog-message">
+      No hay productos con stock disponible por el momento.
+    </div>
+    <div *ngIf="!cargandoProductos && !errorProductos && productosDestacados.length > 0" class="rejilla-productos row g-4">
+      <article class="tarjeta-producto card h-100 col-12 col-sm-6 col-lg-4" *ngFor="let producto of productosDestacados; trackBy: trackById">
+        <div class="imagen-producto">
+          <img
+            *ngIf="!imagenesFallidas.has(producto.id); else imagenDestacadaAlternativa"
+            [src]="producto.imagen"
+            [alt]="producto.nombre"
+            class="product-image"
+            (error)="marcarImagenFallida(producto.id)"
+          />
+          <ng-template #imagenDestacadaAlternativa>
+            <div class="home-image-fallback">Dulce Esencia<small>Imagen no disponible</small></div>
+          </ng-template>
+        </div>
+        <div class="contenido-producto">
+          <span class="categoria-producto">{{ producto.categoria }}</span>
+          <h3>{{ producto.nombre }}</h3>
+          <span class="precio-producto">{{ producto.precio | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</span>
+          <small class="stock-destacado">{{ producto.stock }} unidades disponibles</small>
+          <a class="btn boton boton-secundario boton-producto" routerLink="/productos">Ver producto</a>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -87,22 +107,33 @@
       </div>
       <p class="texto-seccion">Detalles pensados para que cada antojo tenga una buena excusa.</p>
     </div>
-    <div class="rejilla-promociones">
-      <article class="tarjeta-promocion promocion-destacada">
-        <img src="/images/torta-principal.jpeg" alt="Torta destacada de Dulce Esencia" class="promotion-image" />
-        <span class="promocion-numero">01</span>
-        <h3>10% de descuento en tortas</h3>
-        <p>Haz que tu celebración sea aún más especial.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+    <div *ngIf="cargandoProductos" class="home-offer-message" role="status">Consultando las promociones activas...</div>
+    <div *ngIf="!cargandoProductos && errorProductos" class="home-offer-message" role="alert">
+      Las promociones no están disponibles ahora mismo.
+    </div>
+    <div *ngIf="!cargandoProductos && !errorProductos && promocionesDestacadas.length === 0" class="home-offer-message">
+      No hay promociones de productos activas por el momento.
+    </div>
+    <div *ngIf="!cargandoProductos && !errorProductos && promocionesDestacadas.length > 0" class="rejilla-promociones">
+      <article class="tarjeta-promocion card" *ngFor="let producto of promocionesDestacadas; let indice = index; trackBy: trackById" [class.promocion-destacada]="indice === 0">
+        <div class="home-promo-imagen">
+          <img
+            *ngIf="!imagenesFallidas.has(producto.id); else imagenOfertaAlternativa"
+            [src]="producto.imagen"
+            [alt]="producto.nombre"
+            class="promotion-image"
+            (error)="marcarImagenFallida(producto.id)"
+          />
+          <ng-template #imagenOfertaAlternativa>
+            <div class="home-image-fallback">Dulce Esencia<small>Imagen no disponible</small></div>
+          </ng-template>
+        </div>
+        <span class="promocion-numero">{{ indice + 1 | number: '2.0-0' }}</span>
+        <h3>{{ descripcionOferta(producto) }}</h3>
+        <p>{{ producto.nombre }} · {{ producto.precio | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</p>
+        <a routerLink="/tienda" class="enlace-flecha">Ver en tienda <span aria-hidden="true">→</span></a>
       </article>
-      <article class="tarjeta-promocion">
-        <img src="/images/cupcakes-chocolate.jpg" alt="Cupcakes de chocolate para la promoción 2x1" class="promotion-image" />
-        <span class="promocion-numero">02</span>
-        <h3>2x1 en cupcakes</h3>
-        <p>Un detalle para compartir se disfruta el doble.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
-      </article>
-      <article class="tarjeta-promocion">
+      <article class="tarjeta-promocion card">
         <img src="/images/productos.jpg" alt="Selección de postres para el box dulce de la semana" class="promotion-image" />
         <span class="promocion-numero">03</span>
         <h3>Box dulce de la semana</h3>
@@ -127,15 +158,15 @@
     <form class="formulario-pedido">
       <div class="campo-formulario">
         <label for="nombreCliente">Nombre del cliente</label>
-        <input type="text" id="nombreCliente" name="nombreCliente" placeholder="Tu nombre" autocomplete="name" />
+        <input type="text" id="nombreCliente" name="nombreCliente" class="form-control" placeholder="Tu nombre" autocomplete="name" />
       </div>
       <div class="campo-formulario">
         <label for="correoCliente">Correo electrónico</label>
-        <input type="email" id="correoCliente" name="correoCliente" placeholder="tu@email.com" autocomplete="email" />
+        <input type="email" id="correoCliente" name="correoCliente" class="form-control" placeholder="tu@email.com" autocomplete="email" />
       </div>
       <div class="campo-formulario">
         <label for="productoSeleccionado">Producto</label>
-        <select id="productoSeleccionado" name="productoSeleccionado">
+        <select id="productoSeleccionado" name="productoSeleccionado" class="form-select">
           <option value="">Selecciona un producto</option>
           <option value="torta-chocolate">Torta de chocolate</option>
           <option value="torta-vainilla">Torta de vainilla</option>
@@ -148,18 +179,18 @@
       <div class="fila-formulario">
         <div class="campo-formulario">
           <label for="cantidadProducto">Cantidad</label>
-          <input type="number" id="cantidadProducto" name="cantidadProducto" min="1" value="1" />
+          <input type="number" id="cantidadProducto" name="cantidadProducto" class="form-control" min="1" value="1" />
         </div>
         <div class="campo-formulario">
           <label for="tipoPedido">Tipo de pedido</label>
-          <select id="tipoPedido" name="tipoPedido">
+          <select id="tipoPedido" name="tipoPedido" class="form-select">
             <option value="">Selecciona una opción</option>
             <option value="recojo">Recojo en tienda</option>
             <option value="delivery">Delivery</option>
           </select>
         </div>
       </div>
-      <button class="boton boton-principal boton-formulario" type="button">Enviar pedido</button>
+      <button class="btn boton boton-principal boton-formulario" type="button">Enviar pedido</button>
       <p class="mensaje-pedido" aria-live="polite"></p>
     </form>
   </div>

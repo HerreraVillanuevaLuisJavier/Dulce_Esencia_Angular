@@ -22,14 +22,14 @@
     <div class="pie-enlaces">
       <h3>Visita</h3>
       <a href="tel:+51999999999">+51 999 999 999</a>
-      <a href="mailto:contacto@dulceesencia.pe">contacto@dulceesencia.pe</a>
+      <a href="mailto:contacto@dulceesencia.pe">{{ 'CONTACTO@DULCEESENCIA.PE' | lowercase }}</a>
       <a href="https://wa.me/51999999999" target="_blank" rel="noreferrer">WhatsApp</a>
     </div>
   </div>
 
   <div class="pie-inferior">
     <div class="contenedor">
-      <p>© 2026 Dulce Esencia. Todos los derechos reservados.</p>
+      <p>© {{ fechaActual | date: 'yyyy' }} Dulce Esencia. Todos los derechos reservados. · Hoy es {{ fechaActual | date: "d 'de' MMMM 'de' yyyy":undefined:'es-PE' }}</p>
     </div>
   </div>
 </footer>

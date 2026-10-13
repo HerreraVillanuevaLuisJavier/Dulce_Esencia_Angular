@@ -1,18 +1,86 @@
-import { Component } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localeEsPe from '@angular/common/locales/es-PE';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { CategoriaProducto, Producto } from '../../core/models/producto.model';
+import { ProductoService } from '../../core/services/producto.service';
+
+registerLocaleData(localeEsPe);
 
 @Component({
   selector: 'app-productos-page',
   standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })
-export class ProductosPage {
-  readonly productos = [
-    { nombre: 'Torta de chocolate', categoria: 'Tortas', precio: 'S/ 65.00', descripcion: 'Cobertura cremosa y textura intensa, perfecta para celebraciones.', imagen: '/images/pastel-chocolate.jpg' },
-    { nombre: 'Torta de vainilla', categoria: 'Tortas', precio: 'S/ 60.00', descripcion: 'Bizcocho suave con relleno ligero y un aroma delicado.', imagen: '/images/torta-vainilla.jpg' },
-    { nombre: 'Cheesecake de frutos rojos', categoria: 'Cheesecakes', precio: 'S/ 72.00', descripcion: 'Base cremosa con un toque ácido y dulce muy equilibrado.', imagen: '/images/cheesecake-frutos-rojos.jpg' },
-    { nombre: 'Cupcakes de chocolate', categoria: 'Cupcakes', precio: 'S/ 28.00', descripcion: 'Mordidas suaves, sabrosas y decoradas al detalle.', imagen: '/images/cupcakes-chocolate.jpg' },
-    { nombre: 'Cupcakes de vainilla', categoria: 'Cupcakes', precio: 'S/ 26.00', descripcion: 'Estilo clásico para compartir en reuniones encantadoras.', imagen: '/images/cupcakes-vainilla.jpg' },
-    { nombre: 'Box dulce especial', categoria: 'Boxes dulces', precio: 'S/ 48.00', descripcion: 'Selección especial para regalar o disfrutar en compañía.', imagen: '/images/productos.jpg' },
-  ];
+export class ProductosPage implements OnInit {
+  private readonly productoService = inject(ProductoService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  readonly categorias: CategoriaProducto[] = ['Tortas', 'Cupcakes', 'Cheesecakes', 'Cajas de postres'];
+  productos: Producto[] = [];
+  cargando = true;
+  error = '';
+  busqueda = '';
+  categoriaSeleccionada: CategoriaProducto | '' = '';
+  readonly imagenesFallidas = new Set<number>();
+
+  ngOnInit(): void {
+    this.cargarProductos();
+  }
+
+  get productosFiltrados(): Producto[] {
+    const termino = this.busqueda.trim().toLocaleLowerCase('es-PE');
+
+    return this.productos.filter((producto) => {
+      const coincideNombre = producto.nombre.toLocaleLowerCase('es-PE').includes(termino);
+      const coincideCategoria = !this.categoriaSeleccionada || producto.categoria === this.categoriaSeleccionada;
+      return coincideNombre && coincideCategoria;
+    });
+  }
+
+  get stockMaximo(): number {
+    return Math.max(0, ...this.productos.map((producto) => producto.stock));
+  }
+
+  cargarProductos(): void {
+    this.cargando = true;
+    this.error = '';
+
+    this.productoService
+      .obtenerProductos()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (productos) => {
+          this.productos = productos;
+          this.imagenesFallidas.clear();
+          this.cargando = false;
+        },
+        error: () => {
+          this.productos = [];
+          this.cargando = false;
+          this.error = 'No pudimos cargar el catálogo. Comprueba que JSON Server esté activo e inténtalo de nuevo.';
+        },
+      });
+  }
+
+  limpiarFiltros(): void {
+    this.busqueda = '';
+    this.categoriaSeleccionada = '';
+  }
+
+  marcarImagenFallida(productoId: number): void {
+    this.imagenesFallidas.add(productoId);
+  }
+
+  porcentajeStock(stock: number): number {
+    const stockMaximo = Math.max(1, ...this.productos.map((producto) => producto.stock));
+    return Math.min((stock / stockMaximo) * 100, 100);
+  }
+
+  trackById(_index: number, producto: Producto): number {
+    return producto.id;
+  }
 }

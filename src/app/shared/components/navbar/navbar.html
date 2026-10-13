@@ -8,7 +8,7 @@
       </span>
     </a>
 
-    <nav class="navegacion-principal" aria-label="Navegación principal">
+    <nav class="navegacion-principal navbar" aria-label="Navegación principal">
       <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
       <a routerLink="/productos" routerLinkActive="active-link">Productos</a>
       <a routerLink="/ofertas" routerLinkActive="active-link">Ofertas</a>
@@ -17,10 +17,10 @@
 
       @if (authService.isAuthenticated()) {
         <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
-        <button class="boton boton-secundario boton-nav" type="button" (click)="logout()">Cerrar sesión</button>
+        <button class="btn boton boton-secundario boton-nav" type="button" (click)="logout()">Cerrar sesión</button>
       } @else {
         <a routerLink="/mi-cuenta" routerLinkActive="active-link">Mi cuenta</a>
-        <a routerLink="/login" routerLinkActive="active-link" class="boton boton-principal boton-nav">Login</a>
+        <a routerLink="/login" routerLinkActive="active-link" class="btn boton boton-principal boton-nav">Login</a>
       }
     </nav>
   </div>

@@ -11,3 +11,7 @@
 .active-link {
   color: #e7b9b3;
 }
+
+.navegacion-principal.navbar {
+  padding: 0;
+}

@@ -47,11 +47,9 @@ export class AuthService {
 
     try {
       const parsedUser = JSON.parse(storedUser) as AuthUser;
-      this.isAuthenticated.set(true);
       return parsedUser;
     } catch {
       localStorage.removeItem(this.storageKey);
-      this.isAuthenticated.set(false);
       return null;
     }
   }

@@ -5,29 +5,42 @@
         <p class="etiqueta-seccion">Panel administrativo</p>
         <h2>Dashboard</h2>
       </div>
-      <button class="boton boton-secundario" type="button" (click)="logout()">Cerrar sesión</button>
+      <button class="btn boton boton-secundario" type="button" (click)="logout()">Cerrar sesión</button>
     </div>
 
-    <div class="dashboard-card">
+    <div class="dashboard-card card">
       <h3>Bienvenido, {{ authService.currentUser()?.name }}</h3>
-      <p>Estás autenticado con la sesión de demostración. Aquí podrás continuar con futuras funciones administrativas.</p>
+      <p>Estás autenticado con la sesión de demostración. Aquí puedes consultar un resumen actualizado del catálogo.</p>
     </div>
+
+    <p *ngIf="cargandoProductos" class="dashboard-api-message" role="status" aria-live="polite">
+      Cargando estadísticas del catálogo...
+    </p>
+    <div *ngIf="!cargandoProductos && errorProductos" class="dashboard-api-message dashboard-api-error" role="alert">
+      <span>{{ errorProductos }}</span>
+      <button class="btn boton boton-secundario" type="button" (click)="cargarProductos()">Reintentar</button>
+    </div>
+    <p *ngIf="!cargandoProductos && !errorProductos && productos.length === 0" class="dashboard-api-message">
+      La API respondió, pero todavía no hay productos en el catálogo.
+    </p>
 
     <div class="dashboard-grid">
-      <article class="dashboard-stat">
-        <span>Pedidos</span>
-        <strong>24</strong>
-        <small>Este mes</small>
+      <article class="dashboard-stat card">
+        <span>Productos en catálogo</span>
+        <strong>{{ cargandoProductos || errorProductos ? '—' : totalProductos }}</strong>
+        <small>Datos de JSON Server</small>
       </article>
-      <article class="dashboard-stat">
-        <span>Clientes</span>
-        <strong>180</strong>
-        <small>Activos</small>
+      <article class="dashboard-stat card">
+        <span>Inventario crítico</span>
+        <strong>{{ cargandoProductos || errorProductos ? '—' : inventarioCritico }}</strong>
+        <small *ngIf="!cargandoProductos && !errorProductos">{{ productosSinStock }} agotados · {{ productosStockBajo }} con stock bajo</small>
+        <small *ngIf="cargandoProductos">Calculando...</small>
+        <small *ngIf="errorProductos">Sin datos de inventario</small>
       </article>
-      <article class="dashboard-stat">
-        <span>Promociones</span>
-        <strong>06</strong>
-        <small>En campaña</small>
+      <article class="dashboard-stat card">
+        <span>Ofertas activas</span>
+        <strong>{{ cargandoProductos || errorProductos ? '—' : ofertasActivas }}</strong>
+        <small>Productos con oferta y stock</small>
       </article>
     </div>
   </div>

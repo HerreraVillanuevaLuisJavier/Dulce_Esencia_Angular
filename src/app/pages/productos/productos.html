@@ -8,21 +8,95 @@
       <p class="texto-seccion">Pasteles, cupcakes y elementos artesanales pensados para cada ocasión especial.</p>
     </div>
 
-    <div class="rejilla-productos">
-      @for (producto of productos; track producto.nombre) {
-        <article class="tarjeta-producto">
-          <div class="imagen-producto" aria-hidden="true">
-            <img [src]="producto.imagen" [alt]="producto.nombre" class="product-image" />
+    <form class="filtros-productos card" (submit)="$event.preventDefault()">
+      <div class="campo-filtro">
+        <label for="busqueda-producto">Buscar producto</label>
+        <input
+          id="busqueda-producto"
+          name="busqueda"
+          type="search"
+          placeholder="Escribe el nombre de un producto"
+          class="form-control"
+          [(ngModel)]="busqueda"
+          [ngClass]="{ 'filtro-activo': busqueda.trim().length > 0 }"
+        />
+      </div>
+      <div class="campo-filtro">
+        <label for="categoria-producto">Categoría</label>
+        <select
+          id="categoria-producto"
+          name="categoria"
+          class="form-select"
+          [(ngModel)]="categoriaSeleccionada"
+          [ngStyle]="{ 'border-color': categoriaSeleccionada ? 'var(--color-marron)' : 'rgba(109, 64, 54, 0.2)' }"
+        >
+          <option value="">Todas las categorías</option>
+          <option *ngFor="let categoria of categorias" [ngValue]="categoria">{{ categoria }}</option>
+        </select>
+      </div>
+      <button class="btn boton boton-secundario boton-limpiar" type="button" (click)="limpiarFiltros()">
+        Limpiar filtros
+      </button>
+    </form>
+
+    <div *ngIf="cargando" class="estado-catalogo estado-carga" role="status" aria-live="polite">
+      <span class="indicador-carga" aria-hidden="true"></span>
+      <p>Cargando productos...</p>
+    </div>
+
+    <div *ngIf="!cargando && error" class="estado-catalogo estado-error" role="alert">
+      <p>{{ error }}</p>
+      <button class="btn boton boton-principal" type="button" (click)="cargarProductos()">Reintentar</button>
+    </div>
+
+    <div *ngIf="!cargando && !error && productos.length === 0" class="estado-catalogo">
+      <p>El catálogo todavía no tiene productos disponibles.</p>
+    </div>
+
+    <ng-container *ngIf="!cargando && !error && productos.length > 0">
+      <div *ngIf="productosFiltrados.length === 0" class="estado-catalogo">
+        <p>No encontramos productos con esos filtros.</p>
+        <button class="boton boton-secundario" type="button" (click)="limpiarFiltros()">Ver todo el catálogo</button>
+      </div>
+
+      <p *ngIf="productosFiltrados.length > 0" class="resultado-productos" aria-live="polite">
+        {{ productosFiltrados.length }} {{ productosFiltrados.length === 1 ? 'producto encontrado' : 'productos encontrados' }}
+      </p>
+
+      <div *ngIf="productosFiltrados.length > 0" class="rejilla-productos row g-4">
+        <article class="tarjeta-producto card h-100 col-12 col-sm-6 col-lg-4" *ngFor="let producto of productosFiltrados; trackBy: trackById">
+          <div class="imagen-producto">
+            <img
+              *ngIf="!imagenesFallidas.has(producto.id); else imagenAlternativa"
+              [src]="producto.imagen"
+              [alt]="producto.nombre"
+              class="product-image"
+              (error)="marcarImagenFallida(producto.id)"
+            />
+            <ng-template #imagenAlternativa>
+              <div class="imagen-alternativa" [ngClass]="{ 'imagen-alternativa-caja': producto.categoria === 'Cajas de postres' }">
+                <span aria-hidden="true">Dulce Esencia</span>
+                <small>Imagen no disponible</small>
+              </div>
+            </ng-template>
           </div>
           <div class="contenido-producto">
             <span class="categoria-producto">{{ producto.categoria }}</span>
             <h3>{{ producto.nombre }}</h3>
-            <p>{{ producto.descripcion }}</p>
-            <span class="precio-producto">{{ producto.precio }}</span>
-            <button class="boton boton-secundario boton-producto" type="button">Elegir producto</button>
+            <p class="precio-producto">{{ producto.precio | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</p>
+            <div class="stock-producto">
+              <div class="stock-detalle">
+                <span>Stock</span>
+                <strong [ngClass]="{ 'stock-bajo': producto.stock <= 5 }">{{ producto.stock }} unidades</strong>
+              </div>
+              <div class="barra-stock" role="progressbar" [attr.aria-valuenow]="producto.stock" aria-valuemin="0" [attr.aria-valuemax]="stockMaximo" [attr.aria-label]="'Stock de ' + producto.nombre">
+                <span [ngClass]="{ 'barra-stock-baja': producto.stock <= 5 }" [ngStyle]="{ width: porcentajeStock(producto.stock) + '%' }"></span>
+              </div>
+            </div>
+            <button class="btn boton boton-secundario boton-producto" type="button">Elegir producto</button>
           </div>
         </article>
-      }
-    </div>
+      </div>
+    </ng-container>
   </div>
 </section>

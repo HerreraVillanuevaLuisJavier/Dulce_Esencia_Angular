@@ -8,48 +8,77 @@
       <p class="texto-seccion">Explora nuestras promociones para hacer de cada reunión un momento aún más dulce.</p>
     </div>
 
-    <div class="rejilla-promociones">
-      <article class="tarjeta-promocion promocion-destacada">
-        <img src="/images/torta-principal.jpeg" alt="Torta destacada Dulce Esencia" class="promotion-image" />
-        <span class="promocion-numero">01</span>
-        <h3>10% de descuento en tortas</h3>
-        <p>Haz que tu celebración sea aún más especial.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+    <div *ngIf="cargando" class="estado-ofertas" role="status" aria-live="polite">
+      <span class="indicador-carga-ofertas" aria-hidden="true"></span>
+      <p>Cargando las ofertas del catálogo...</p>
+    </div>
+
+    <div *ngIf="!cargando && error" class="estado-ofertas estado-ofertas-error" role="alert">
+      <p>{{ error }}</p>
+      <button class="btn boton boton-secundario" type="button" (click)="cargarProductos()">Reintentar</button>
+    </div>
+
+    <div *ngIf="!cargando && !error && productosEnOferta.length === 0" class="estado-ofertas">
+      <p>No hay ofertas de productos publicadas por el momento.</p>
+    </div>
+
+    <div *ngIf="!cargando && !error && productosEnOferta.length > 0" class="rejilla-promociones rejilla-ofertas-producto">
+      <article class="tarjeta-promocion card oferta-producto" *ngFor="let producto of productosEnOferta; trackBy: trackById">
+        <div class="imagen-oferta">
+          <img
+            *ngIf="!imagenesFallidas.has(producto.id); else imagenAlternativaOferta"
+            [src]="producto.imagen"
+            [alt]="producto.nombre"
+            class="promotion-image"
+            (error)="marcarImagenFallida(producto.id)"
+          />
+          <ng-template #imagenAlternativaOferta>
+            <div class="imagen-oferta-alternativa"><span>Dulce Esencia</span><small>Imagen no disponible</small></div>
+          </ng-template>
+          <span class="etiqueta-oferta">{{ descripcionOferta(producto) }}</span>
+        </div>
+        <span class="promocion-numero">{{ producto.categoria | uppercase }}</span>
+        <h3>{{ producto.nombre }}</h3>
+        <p *ngIf="producto.oferta?.tipo === '2x1'" class="detalle-oferta">Precio para dos unidades; se paga una.</p>
+        <div class="precios-oferta">
+          <span>Precio original <del>{{ precioOriginalOferta(producto) | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</del></span>
+          <span>Ahorro <strong>{{ montoDescuento(producto) | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</strong></span>
+          <span class="precio-final-oferta">Precio final <strong>{{ precioFinalOferta(producto) | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</strong></span>
+        </div>
+        <p class="stock-oferta">Disponibles: {{ producto.stock }} unidades</p>
+        <a routerLink="/tienda" class="enlace-flecha">Ver en tienda <span aria-hidden="true">→</span></a>
       </article>
-      <article class="tarjeta-promocion">
-        <img src="/images/cupcakes-chocolate.jpg" alt="Cupcakes de chocolate" class="promotion-image" />
-        <span class="promocion-numero">02</span>
-        <h3>2x1 en cupcakes</h3>
-        <p>Un detalle para compartir se disfruta el doble.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
-      </article>
-      <article class="tarjeta-promocion">
+    </div>
+
+    <h3 class="titulo-campanas">Más motivos para celebrar</h3>
+    <div class="rejilla-promociones rejilla-campanas">
+      <article class="tarjeta-promocion card">
         <img src="/images/productos.jpg" alt="Selección de postres artesanales" class="promotion-image" />
         <span class="promocion-numero">03</span>
         <h3>Box dulce de la semana</h3>
         <p>Una selección sorpresa para endulzar tus días.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+        <a routerLink="/tienda" class="enlace-flecha">Ver en tienda <span aria-hidden="true">→</span></a>
       </article>
       <article class="tarjeta-promocion">
         <img src="/images/pastel-chocolate.jpg" alt="Torta artesanal de chocolate" class="promotion-image" />
         <span class="promocion-numero">04</span>
         <h3>Envío gratis</h3>
         <p>En pedidos mayores a S/ 180 para Lima Metropolitana.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+        <a routerLink="/tienda" class="enlace-flecha">Ver en tienda <span aria-hidden="true">→</span></a>
       </article>
       <article class="tarjeta-promocion">
         <img src="/images/cupcakes-vainilla.jpg" alt="Cupcakes de vainilla" class="promotion-image" />
         <span class="promocion-numero">05</span>
-        <h3>Descuento por cumpleañero</h3>
+        <h3>Detalle de cumpleaños</h3>
         <p>Un detalle extra para tus fechas especiales en casa.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+        <a routerLink="/tienda" class="enlace-flecha">Ver en tienda <span aria-hidden="true">→</span></a>
       </article>
       <article class="tarjeta-promocion">
         <img src="/images/productos.jpg" alt="Variedad de postres para regalar" class="promotion-image" />
         <span class="promocion-numero">06</span>
         <h3>Kit sorpresa para regalar</h3>
         <p>Incluye cupcakes, chocolates y un mensaje de cariño.</p>
-        <a routerLink="/tienda" class="enlace-flecha">Pedir ahora <span aria-hidden="true">→</span></a>
+        <a routerLink="/tienda" class="enlace-flecha">Ver en tienda <span aria-hidden="true">→</span></a>
       </article>
     </div>
   </div>

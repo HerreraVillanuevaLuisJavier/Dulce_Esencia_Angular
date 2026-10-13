@@ -7,24 +7,85 @@
     </div>
 
     <div class="contacto-form-wrap">
-      <form class="formulario-pedido formulario-contacto">
+      <form class="formulario-pedido formulario-contacto card" #formularioContacto="ngForm" (ngSubmit)="enviarMensaje(formularioContacto)" novalidate>
         <div class="campo-formulario">
           <label for="contacto-nombre">Nombre</label>
-          <input id="contacto-nombre" type="text" placeholder="Tu nombre" />
+          <input
+            id="contacto-nombre"
+            name="nombre"
+            type="text"
+            class="form-control"
+            placeholder="Tu nombre"
+            [(ngModel)]="nombre"
+            #nombreControl="ngModel"
+            required
+            [attr.aria-invalid]="nombreControl.invalid && (nombreControl.touched || formularioContacto.submitted)"
+            [attr.aria-describedby]="nombreControl.invalid && (nombreControl.touched || formularioContacto.submitted) ? 'contacto-nombre-error' : null"
+          />
+          <small *ngIf="nombreControl.errors?.['required'] && (nombreControl.touched || formularioContacto.submitted)" id="contacto-nombre-error" class="formulario-error" role="alert">
+            El nombre es obligatorio.
+          </small>
         </div>
         <div class="campo-formulario">
           <label for="contacto-email">Correo</label>
-          <input id="contacto-email" type="email" placeholder="tu@email.com" />
+          <input
+            id="contacto-email"
+            name="correo"
+            type="email"
+            class="form-control"
+            placeholder="tu@email.com"
+            [(ngModel)]="correo"
+            #correoControl="ngModel"
+            required
+            email
+            [attr.aria-invalid]="correoControl.invalid && (correoControl.touched || formularioContacto.submitted)"
+            [attr.aria-describedby]="correoControl.invalid && (correoControl.touched || formularioContacto.submitted) ? 'contacto-email-error' : null"
+          />
+          <small *ngIf="correoControl.errors?.['required'] && (correoControl.touched || formularioContacto.submitted)" id="contacto-email-error" class="formulario-error" role="alert">
+            El correo es obligatorio.
+          </small>
+          <small *ngIf="correoControl.errors?.['email'] && (correoControl.touched || formularioContacto.submitted)" id="contacto-email-error" class="formulario-error" role="alert">
+            Escribe un correo electrónico válido.
+          </small>
         </div>
         <div class="campo-formulario">
           <label for="contacto-asunto">Asunto</label>
-          <input id="contacto-asunto" type="text" placeholder="¿Qué te gustaría pedir?" />
+          <input
+            id="contacto-asunto"
+            name="asunto"
+            type="text"
+            class="form-control"
+            placeholder="¿Qué te gustaría pedir?"
+            [(ngModel)]="asunto"
+            #asuntoControl="ngModel"
+            required
+            [attr.aria-invalid]="asuntoControl.invalid && (asuntoControl.touched || formularioContacto.submitted)"
+            [attr.aria-describedby]="asuntoControl.invalid && (asuntoControl.touched || formularioContacto.submitted) ? 'contacto-asunto-error' : null"
+          />
+          <small *ngIf="asuntoControl.errors?.['required'] && (asuntoControl.touched || formularioContacto.submitted)" id="contacto-asunto-error" class="formulario-error" role="alert">
+            El asunto es obligatorio.
+          </small>
         </div>
         <div class="campo-formulario">
           <label for="contacto-mensaje">Mensaje</label>
-          <textarea id="contacto-mensaje" rows="5" placeholder="Cuéntanos tus ideas..."></textarea>
+          <textarea
+            id="contacto-mensaje"
+            name="mensaje"
+            rows="5"
+            class="form-control"
+            placeholder="Cuéntanos tus ideas..."
+            [(ngModel)]="mensaje"
+            #mensajeControl="ngModel"
+            required
+            [attr.aria-invalid]="mensajeControl.invalid && (mensajeControl.touched || formularioContacto.submitted)"
+            [attr.aria-describedby]="mensajeControl.invalid && (mensajeControl.touched || formularioContacto.submitted) ? 'contacto-mensaje-error' : null"
+          ></textarea>
+          <small *ngIf="mensajeControl.errors?.['required'] && (mensajeControl.touched || formularioContacto.submitted)" id="contacto-mensaje-error" class="formulario-error" role="alert">
+            El mensaje es obligatorio.
+          </small>
         </div>
-        <button class="boton boton-principal boton-formulario" type="button">Enviar mensaje</button>
+        <p *ngIf="confirmacion" class="confirmacion-contacto" role="status" aria-live="polite">{{ confirmacion }}</p>
+        <button class="btn boton boton-principal boton-formulario" type="submit">Enviar mensaje</button>
       </form>
     </div>
   </div>
