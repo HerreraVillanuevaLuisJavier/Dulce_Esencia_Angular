@@ -175,6 +175,31 @@
       "total": 137,
       "estado": "pendiente",
       "id": 4
+    },
+    {
+      "fechaCreacion": "2026-10-14T03:46:30.880Z",
+      "nombreCliente": "Nicolas Suarez",
+      "correoCliente": "U24238616@utp.edu.pe",
+      "tipoEntrega": "recojo",
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Torta de chocolate",
+          "precioUnitario": 65,
+          "cantidad": 1,
+          "subtotal": 65
+        },
+        {
+          "productoId": 2,
+          "nombre": "Torta de vainilla",
+          "precioUnitario": 60,
+          "cantidad": 1,
+          "subtotal": 60
+        }
+      ],
+      "total": 125,
+      "estado": "pendiente",
+      "id": 5
     }
   ]
 }
