@@ -8,6 +8,8 @@ import { NotFoundPage } from './pages/not-found/not-found';
 import { OfertasPage } from './pages/ofertas/ofertas';
 import { ProductosPage } from './pages/productos/productos';
 import { TiendaPage } from './pages/tienda/tienda';
+import { CarritoPage } from './pages/carrito/carrito';
+import { CheckoutPage } from './pages/checkout/checkout';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -15,6 +17,8 @@ export const routes: Routes = [
   { path: 'productos', component: ProductosPage },
   { path: 'ofertas', component: OfertasPage },
   { path: 'tienda', component: TiendaPage },
+  { path: 'carrito', component: CarritoPage },
+  { path: 'checkout', component: CheckoutPage },
   { path: 'contacto', component: ContactoPage },
   { path: 'mi-cuenta', component: MiCuentaPage },
   { path: 'login', component: LoginPage },

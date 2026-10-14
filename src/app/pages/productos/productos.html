@@ -65,7 +65,7 @@
 
       <div *ngIf="productosFiltrados.length > 0" class="rejilla-productos row g-4">
         <article class="tarjeta-producto card h-100 col-12 col-sm-6 col-lg-4" *ngFor="let producto of productosFiltrados; trackBy: trackById">
-          <div class="imagen-producto">
+          <button class="imagen-producto imagen-producto-boton" type="button" [attr.aria-label]="'Ver detalles de ' + producto.nombre" (click)="verDetalles(producto)">
             <img
               *ngIf="!imagenesFallidas.has(producto.id); else imagenAlternativa"
               [src]="producto.imagen"
@@ -74,12 +74,12 @@
               (error)="marcarImagenFallida(producto.id)"
             />
             <ng-template #imagenAlternativa>
-              <div class="imagen-alternativa" [ngClass]="{ 'imagen-alternativa-caja': producto.categoria === 'Cajas de postres' }">
-                <span aria-hidden="true">Dulce Esencia</span>
+              <span class="imagen-alternativa" [ngClass]="{ 'imagen-alternativa-caja': producto.categoria === 'Cajas de postres' }" aria-hidden="true">
+                <span>Dulce Esencia</span>
                 <small>Imagen no disponible</small>
-              </div>
+              </span>
             </ng-template>
-          </div>
+          </button>
           <div class="contenido-producto">
             <span class="categoria-producto">{{ producto.categoria }}</span>
             <h3>{{ producto.nombre }}</h3>
@@ -93,10 +93,35 @@
                 <span [ngClass]="{ 'barra-stock-baja': producto.stock <= 5 }" [ngStyle]="{ width: porcentajeStock(producto.stock) + '%' }"></span>
               </div>
             </div>
-            <button class="btn boton boton-secundario boton-producto" type="button">Elegir producto</button>
+            <button class="btn boton boton-secundario boton-producto" type="button" (click)="verDetalles(producto)">Ver detalles</button>
           </div>
         </article>
       </div>
     </ng-container>
   </div>
 </section>
+
+<div *ngIf="productoSeleccionado as producto" class="modal-detalle-fondo" role="presentation" (click)="cerrarSiFondo($event)">
+  <section class="modal-detalle" role="dialog" aria-modal="true" [attr.aria-labelledby]="'modal-titulo-' + producto.id" [attr.aria-describedby]="'modal-categoria-' + producto.id">
+    <button class="modal-detalle-cerrar-icono" type="button" aria-label="Cerrar detalles" (click)="cerrarDetalles()">&times;</button>
+    <img class="modal-detalle-imagen" [src]="producto.imagen" [alt]="producto.nombre" />
+    <div class="modal-detalle-contenido">
+      <span class="categoria-producto" [id]="'modal-categoria-' + producto.id">{{ producto.categoria }}</span>
+      <h2 [id]="'modal-titulo-' + producto.id">{{ producto.nombre }}</h2>
+      <section class="modal-detalle-descripcion" [attr.aria-labelledby]="'modal-descripcion-titulo-' + producto.id">
+        <h3 [id]="'modal-descripcion-titulo-' + producto.id">Acerca de este producto</h3>
+        <p *ngIf="producto.descripcion?.trim(); else descripcionPendiente">{{ producto.descripcion }}</p>
+        <ng-template #descripcionPendiente><p class="modal-detalle-sin-descripcion">La descripción todavía no está disponible.</p></ng-template>
+      </section>
+      <p class="modal-detalle-precio">{{ producto.precio | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</p>
+      <div class="modal-detalle-disponibilidad">
+        <p><span>Stock disponible</span><strong>{{ producto.stock }} {{ producto.stock === 1 ? 'unidad' : 'unidades' }}</strong></p>
+        <p><span>Estado</span><strong class="modal-detalle-estado" [class.modal-detalle-agotado]="producto.stock <= 0">{{ producto.stock > 0 ? 'Disponible' : 'Agotado' }}</strong></p>
+      </div>
+      <div class="modal-detalle-acciones">
+        <button class="btn boton boton-secundario" type="button" (click)="cerrarDetalles()">Cerrar</button>
+        <a class="btn boton boton-principal" routerLink="/tienda">Ir a comprar</a>
+      </div>
+    </div>
+  </section>
+</div>

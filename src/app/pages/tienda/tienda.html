@@ -1,150 +1,21 @@
 <section class="seccion seccion-pedido pagina-interna">
   <div class="contenedor">
     <div class="encabezado-seccion">
-      <div>
-        <p class="etiqueta-seccion">Compra con estilo</p>
-        <h2>Tienda Dulce Esencia</h2>
-      </div>
-      <p class="texto-seccion">Prepara tus pedidos con una selección pensada para momentos especiales.</p>
+      <div><p class="etiqueta-seccion">Compra con estilo</p><h2>Tienda Dulce Esencia</h2></div>
+      <a class="btn boton boton-principal" routerLink="/carrito">Ver carrito ({{ carrito.unidades() }})</a>
     </div>
-
-    <div class="tienda-grid">
-      <div class="pedido-resumen">
-        <h3>Productos disponibles</h3>
-
-        <div *ngIf="cargando" class="estado-tienda" role="status" aria-live="polite">
-          <span class="indicador-carga-tienda" aria-hidden="true"></span>
-          <p>Cargando productos...</p>
-        </div>
-
-        <div *ngIf="!cargando && error" class="estado-tienda estado-tienda-error" role="alert">
-          <p>{{ error }}</p>
-          <button class="btn boton boton-secundario" type="button" (click)="cargarProductos()">Reintentar</button>
-        </div>
-
-        <p *ngIf="!cargando && !error && productos.length === 0" class="estado-tienda">
-          El catálogo todavía no tiene productos disponibles.
-        </p>
-
-        <p *ngIf="!cargando && !error && productos.length > 0 && productosDisponibles.length === 0" class="estado-tienda">
-          Por el momento no hay productos con stock disponible.
-        </p>
-
-        <div *ngFor="let producto of productosDisponibles; trackBy: trackById" class="resumen-item">
-          <img class="resumen-producto-imagen" [src]="producto.imagen" [alt]="producto.nombre" />
-          <div class="tienda-producto-info">
-            <strong>{{ producto.nombre }}</strong>
-            <p>{{ producto.categoria }} · Stock: {{ producto.stock }}</p>
-          </div>
-          <span class="tienda-producto-precio">{{ producto.precio | currency: 'PEN':'symbol':'1.2-2':'es-PE' }}</span>
-        </div>
-      </div>
-
-      <form class="formulario-pedido" #formularioPedido="ngForm" (ngSubmit)="enviarSolicitud(formularioPedido)" novalidate>
-        <div class="campo-formulario">
-          <label for="store-nombre">Nombre</label>
-          <input
-            id="store-nombre"
-            name="nombre"
-            type="text"
-            class="form-control"
-            placeholder="Tu nombre"
-            [(ngModel)]="nombreCliente"
-            #nombreControl="ngModel"
-            required
-            [attr.aria-invalid]="nombreControl.invalid && (nombreControl.touched || formularioPedido.submitted)"
-            [attr.aria-describedby]="nombreControl.invalid && (nombreControl.touched || formularioPedido.submitted) ? 'store-nombre-error' : null"
-          />
-          <small *ngIf="nombreControl.errors?.['required'] && (nombreControl.touched || formularioPedido.submitted)" id="store-nombre-error" class="formulario-error" role="alert">
-            El nombre es obligatorio.
-          </small>
-        </div>
-        <div class="campo-formulario">
-          <label for="store-email">Correo</label>
-          <input
-            id="store-email"
-            name="correo"
-            type="email"
-            class="form-control"
-            placeholder="tu@email.com"
-            [(ngModel)]="correoCliente"
-            #correoControl="ngModel"
-            required
-            email
-            [attr.aria-invalid]="correoControl.invalid && (correoControl.touched || formularioPedido.submitted)"
-            [attr.aria-describedby]="correoControl.invalid && (correoControl.touched || formularioPedido.submitted) ? 'store-email-error' : null"
-          />
-          <small *ngIf="correoControl.errors?.['required'] && (correoControl.touched || formularioPedido.submitted)" id="store-email-error" class="formulario-error" role="alert">
-            El correo es obligatorio.
-          </small>
-          <small *ngIf="correoControl.errors?.['email'] && (correoControl.touched || formularioPedido.submitted)" id="store-email-error" class="formulario-error" role="alert">
-            Escribe un correo electrónico válido.
-          </small>
-        </div>
-        <div class="campo-formulario">
-          <label for="store-producto">Producto</label>
-          <select
-            id="store-producto"
-            name="producto"
-            class="form-select"
-            [(ngModel)]="productoSeleccionadoId"
-            [disabled]="cargando || !!error || productosDisponibles.length === 0"
-            #productoControl="ngModel"
-            required
-            [attr.aria-invalid]="productoControl.invalid && (productoControl.touched || formularioPedido.submitted)"
-            [attr.aria-describedby]="productoControl.invalid && (productoControl.touched || formularioPedido.submitted) ? 'store-producto-error' : null"
-          >
-            <option [ngValue]="null">Selecciona un producto</option>
-            <option *ngFor="let producto of productosDisponibles; trackBy: trackById" [ngValue]="producto.id">
-              {{ producto.nombre }} — {{ producto.categoria }} ({{ producto.stock }} disponibles)
-            </option>
-          </select>
-          <small *ngIf="productoControl.errors?.['required'] && (productoControl.touched || formularioPedido.submitted)" id="store-producto-error" class="formulario-error" role="alert">
-            Selecciona un producto disponible.
-          </small>
-        </div>
-        <div class="fila-formulario">
-          <div class="campo-formulario">
-            <label for="store-cantidad">Cantidad</label>
-            <input
-              id="store-cantidad"
-              name="cantidad"
-              type="number"
-              class="form-control"
-              min="1"
-              step="1"
-              [max]="productoSeleccionado?.stock ?? null"
-              [(ngModel)]="cantidad"
-              #cantidadControl="ngModel"
-              required
-              [attr.aria-invalid]="cantidadControl.invalid && (cantidadControl.touched || formularioPedido.submitted) || (formularioPedido.submitted && !esCantidadEntera)"
-              [attr.aria-describedby]="cantidadControl.invalid && (cantidadControl.touched || formularioPedido.submitted) || (formularioPedido.submitted && !esCantidadEntera) ? 'store-cantidad-error' : null"
-            />
-            <small
-              *ngIf="cantidadControl.invalid && (cantidadControl.touched || formularioPedido.submitted) || (formularioPedido.submitted && !esCantidadEntera)"
-              id="store-cantidad-error"
-              class="formulario-error"
-              role="alert"
-            >
-              {{ cantidadControl.errors?.['required'] ? 'La cantidad es obligatoria.' : cantidadControl.errors?.['min'] ? 'La cantidad mínima es 1.' : cantidadControl.errors?.['max'] ? 'La cantidad supera el stock disponible.' : 'La cantidad debe ser un número entero.' }}
-            </small>
-          </div>
-          <div class="campo-formulario">
-            <label for="store-tipo">Tipo</label>
-            <select id="store-tipo" name="tipo" class="form-select" [(ngModel)]="tipoPedido" #tipoControl="ngModel" required>
-              <option value="">Selecciona</option>
-              <option value="recojo">Recojo</option>
-              <option value="delivery">Delivery</option>
-            </select>
-            <small *ngIf="tipoControl.errors?.['required'] && (tipoControl.touched || formularioPedido.submitted)" class="formulario-error" role="alert">
-              Selecciona recojo o delivery.
-            </small>
-          </div>
-        </div>
-        <button class="btn boton boton-principal boton-formulario" type="submit">Simular solicitud</button>
-        <p *ngIf="errorFormulario" class="mensaje-pedido mensaje-pedido-error" role="alert">{{ errorFormulario }}</p>
-        <p *ngIf="confirmacionSolicitud" class="mensaje-pedido" role="status" aria-live="polite">{{ confirmacionSolicitud }}</p>
-      </form>
+    <p class="texto-seccion">Prepara tus pedidos con una selección pensada para momentos especiales.</p>
+    <p *ngIf="carrito.avisoStock()" class="mensaje-pedido mensaje-pedido-error" role="status">{{ carrito.avisoStock() }}</p>
+    <p *ngIf="aviso" role="status" class="mensaje-pedido">{{ aviso }}</p>
+    <div *ngIf="cargando" class="estado-tienda" role="status">Cargando productos...</div>
+    <div *ngIf="!cargando && error" class="estado-tienda estado-tienda-error" role="alert"><p>{{ error }}</p><button class="btn boton boton-secundario" (click)="cargarProductos()">Reintentar</button></div>
+    <p *ngIf="!cargando && !error && productos.length === 0" class="estado-tienda">El catálogo todavía no tiene productos disponibles.</p>
+    <div *ngIf="!cargando && !error" class="pedido-resumen catalogo-tienda">
+      <article *ngFor="let producto of productos" class="resumen-item tienda-catalogo-item">
+        <img class="resumen-producto-imagen" [src]="producto.imagen" [alt]="producto.nombre" />
+        <div class="tienda-producto-info"><strong>{{ producto.nombre }}</strong><p>{{ producto.categoria }} · {{ producto.stock > 0 ? producto.stock + ' disponibles' : 'Agotado' }}</p><span class="tienda-producto-precio">{{ producto.precio | currency:'PEN':'symbol':'1.2-2':'es-PE' }} por unidad</span></div>
+        <button class="btn boton boton-secundario boton-agregar" type="button" [disabled]="producto.stock <= 0 || carrito.cantidadDe(producto.id) >= producto.stock" (click)="agregar(producto)">{{ producto.stock <= 0 ? 'Agotado' : carrito.cantidadDe(producto.id) >= producto.stock ? 'Stock máximo' : carrito.cantidadDe(producto.id) > 0 ? 'Añadir otra unidad' : 'Añadir al carrito' }}</button>
+      </article>
     </div>
   </div>
 </section>

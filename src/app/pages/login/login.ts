@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -19,9 +19,11 @@ export class LoginPage {
   showPassword = false;
   errorMessage = '';
 
-  login(): void {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Completa tu correo y contraseña para continuar.';
+  login(formulario: NgForm): void {
+    this.errorMessage = '';
+
+    if (formulario.invalid) {
+      formulario.control.markAllAsTouched();
       return;
     }
 

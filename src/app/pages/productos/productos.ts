@@ -1,8 +1,9 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeEsPe from '@angular/common/locales/es-PE';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, HostListener, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { CategoriaProducto, Producto } from '../../core/models/producto.model';
 import { ProductoService } from '../../core/services/producto.service';
 
@@ -11,7 +12,7 @@ registerLocaleData(localeEsPe);
 @Component({
   selector: 'app-productos-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })
@@ -26,6 +27,7 @@ export class ProductosPage implements OnInit {
   busqueda = '';
   categoriaSeleccionada: CategoriaProducto | '' = '';
   readonly imagenesFallidas = new Set<number>();
+  productoSeleccionado: Producto | null = null;
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -69,6 +71,23 @@ export class ProductosPage implements OnInit {
   limpiarFiltros(): void {
     this.busqueda = '';
     this.categoriaSeleccionada = '';
+  }
+
+  verDetalles(producto: Producto): void {
+    this.productoSeleccionado = producto;
+  }
+
+  cerrarDetalles(): void {
+    this.productoSeleccionado = null;
+  }
+
+  cerrarSiFondo(evento: MouseEvent): void {
+    if (evento.target === evento.currentTarget) this.cerrarDetalles();
+  }
+
+  @HostListener('document:keydown.escape')
+  cerrarConEscape(): void {
+    this.cerrarDetalles();
   }
 
   marcarImagenFallida(productoId: number): void {

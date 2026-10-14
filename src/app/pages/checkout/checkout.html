@@ -1,0 +1,23 @@
+<section class="seccion pagina-interna"><div class="contenedor">
+  <div class="encabezado-seccion"><div><p class="etiqueta-seccion">Último paso</p><h2>Finalizar compra</h2></div><a routerLink="/carrito" class="btn boton boton-secundario">Volver al carrito</a></div>
+  <section *ngIf="confirmacion as pedido" class="confirmacion-pedido" role="status" aria-live="polite">
+    <h3>¡Pedido registrado!</h3><p>Gracias, {{ pedido.nombreCliente }}. Tu número de pedido es <strong>#{{ pedido.id }}</strong>.</p><p>Correo: {{ pedido.correoCliente }} · Entrega: {{ pedido.tipoEntrega === 'delivery' ? 'Delivery' : 'Recojo en tienda' }}</p>
+    <ul><li *ngFor="let linea of pedido.productos">{{ linea.nombre }} × {{ linea.cantidad }} — {{ linea.subtotal | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</li></ul>
+    <p>Total: <strong>{{ pedido.total | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</strong></p><a routerLink="/tienda" class="btn boton boton-principal">Volver a la tienda</a>
+  </section>
+  <div *ngIf="!confirmacion" class="checkout-grid">
+    <form class="pedido-resumen formulario-checkout" #formulario="ngForm" (ngSubmit)="confirmar(formulario)" novalidate>
+      <h3>Datos del cliente</h3>
+      <div class="campo-formulario"><label for="checkout-nombre">Nombre completo</label><input id="checkout-nombre" name="nombre" class="form-control" [(ngModel)]="nombre" required #nombreModel="ngModel" autocomplete="name"><small *ngIf="nombreModel.invalid && (nombreModel.touched || formulario.submitted)" class="formulario-error">Ingresa tu nombre.</small></div>
+      <div class="campo-formulario"><label for="checkout-correo">Correo electrónico</label><input id="checkout-correo" name="correo" type="email" class="form-control" [(ngModel)]="correo" required email #correoModel="ngModel" autocomplete="email"><small *ngIf="correoModel.errors?.['required'] && (correoModel.touched || formulario.submitted)" class="formulario-error">El correo es obligatorio.</small><small *ngIf="correoModel.errors?.['email'] && (correoModel.touched || formulario.submitted)" class="formulario-error">Escribe un correo válido.</small></div>
+      <div class="campo-formulario"><label for="checkout-entrega">Tipo de entrega</label><select id="checkout-entrega" name="tipoEntrega" class="form-select" [(ngModel)]="tipoEntrega" required><option value="recojo">Recojo en tienda</option><option value="delivery">Delivery</option></select></div>
+      <p *ngIf="tipoEntrega === 'recojo'" class="nota-entrega">Tu pedido quedará preparado para recojo en tienda.</p>
+      <ng-container *ngIf="tipoEntrega === 'delivery'"><div class="campo-formulario"><label for="checkout-direccion">Dirección de entrega</label><input id="checkout-direccion" name="direccion" class="form-control" [(ngModel)]="direccion" required #direccionModel="ngModel" autocomplete="street-address"><small *ngIf="direccionModel.invalid && (direccionModel.touched || formulario.submitted)" class="formulario-error">La dirección es obligatoria para delivery.</small></div><div class="campo-formulario"><label for="checkout-referencias">Referencias (opcional)</label><textarea id="checkout-referencias" name="referencias" class="form-control" [(ngModel)]="referencias" rows="2"></textarea></div></ng-container>
+      <p *ngIf="carrito.avisoStock()" class="mensaje-pedido mensaje-pedido-error" role="status">{{ carrito.avisoStock() }} Revisa el carrito para confirmar las cantidades.</p>
+      <p *ngIf="error" class="mensaje-pedido mensaje-pedido-error" role="alert">{{ error }}</p>
+      <button class="btn boton boton-principal" type="submit" [disabled]="enviando || cargandoCatalogo || !carrito.lineas().length || !!carrito.avisoStock()">{{ enviando ? 'Registrando pedido…' : cargandoCatalogo ? 'Verificando stock…' : 'Confirmar pedido' }}</button>
+      <small>Pedido de demostración registrado mediante JSON Server. No se procesan pagos.</small>
+    </form>
+    <aside class="pedido-resumen resumen-checkout"><h3>Resumen de compra</h3><p *ngIf="!carrito.lineas().length">El carrito está vacío.</p><article *ngFor="let linea of carrito.lineas()" class="linea-resumen"><span>{{ linea.producto.nombre }} × {{ linea.cantidad }}<small>{{ linea.producto.precio | currency:'PEN':'symbol':'1.2-2':'es-PE' }} c/u</small></span><strong>{{ linea.subtotal | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</strong></article><p>Entrega: {{ tipoEntrega === 'delivery' ? 'Delivery' : 'Recojo en tienda' }}</p><div class="carrito-total"><span>Total</span><strong>{{ carrito.total() | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</strong></div></aside>
+  </div>
+</div></section>

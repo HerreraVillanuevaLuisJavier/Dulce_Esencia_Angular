@@ -9,6 +9,7 @@ export interface Producto {
   nombre: string;
   imagen: string;
   categoria: CategoriaProducto;
+  descripcion?: string;
   precio: number;
   stock: number;
   oferta?: OfertaProducto;

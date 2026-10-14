@@ -2,11 +2,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { Producto } from '../models/producto.model';
+import { API_URL } from './api.config';
 
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/productos';
+  private readonly apiUrl = `${API_URL}/productos`;
 
   private readonly productos$ = this.http.get<Producto[]>(this.apiUrl).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -18,5 +19,9 @@ export class ProductoService {
 
   obtenerProductos(): Observable<Producto[]> {
     return this.productos$;
+  }
+
+  obtenerProductosActuales(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(this.apiUrl);
   }
 }

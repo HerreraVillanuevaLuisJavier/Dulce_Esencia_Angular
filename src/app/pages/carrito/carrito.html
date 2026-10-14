@@ -1,0 +1,16 @@
+<section class="seccion pagina-interna"><div class="contenedor">
+  <div class="encabezado-seccion"><div><p class="etiqueta-seccion">Tu selección</p><h2>Carrito de compras</h2></div><a routerLink="/tienda" class="btn boton boton-secundario">Regresar a Tienda</a></div>
+  <main class="pedido-resumen">
+    <p *ngIf="cargando" role="status">Verificando productos y stock...</p>
+    <p *ngIf="error" class="mensaje-pedido mensaje-pedido-error" role="alert">{{ error }}</p>
+    <p *ngIf="carrito.avisoStock()" class="mensaje-pedido mensaje-pedido-error" role="status">{{ carrito.avisoStock() }} Revisa las cantidades antes de continuar.</p>
+    <p *ngIf="!cargando && !error && carrito.lineas().length === 0" class="carrito-vacio">Tu carrito está vacío. Explora la tienda para elegir tus postres.</p>
+    <article *ngFor="let linea of carrito.lineas()" class="resumen-item carrito-linea">
+      <img class="resumen-producto-imagen" [src]="linea.producto.imagen" [alt]="linea.producto.nombre" />
+      <div class="tienda-producto-info"><strong>{{ linea.producto.nombre }}</strong><p>Precio unitario: {{ linea.producto.precio | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</p><span>Subtotal: {{ linea.subtotal | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</span></div>
+      <div class="carrito-controles"><button class="btn-control-cantidad" type="button" [disabled]="linea.cantidad <= 1" [attr.aria-label]="'Reducir ' + linea.producto.nombre" (click)="carrito.establecerCantidad(linea.producto, linea.cantidad - 1)">−</button><span class="cantidad-carrito" aria-live="polite">{{ linea.cantidad }}</span><button class="btn-control-cantidad" type="button" [disabled]="linea.cantidad >= linea.producto.stock" [attr.aria-label]="'Aumentar ' + linea.producto.nombre" (click)="carrito.establecerCantidad(linea.producto, linea.cantidad + 1)">+</button><button class="btn-eliminar-carrito" type="button" (click)="carrito.eliminar(linea.producto.id)">Eliminar</button></div>
+    </article>
+    <div *ngIf="carrito.lineas().length" class="carrito-total"><span>Total</span><strong>{{ carrito.total() | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</strong></div>
+    <div *ngIf="carrito.lineas().length" class="acciones-carrito"><button class="btn boton boton-secundario" type="button" (click)="carrito.vaciar()">Vaciar carrito</button><a class="btn boton boton-principal" [class.disabled]="cargando || !!error || !!carrito.avisoStock()" [attr.aria-disabled]="cargando || !!error || !!carrito.avisoStock()" [routerLink]="!cargando && !error && !carrito.avisoStock() ? ['/checkout'] : null">Continuar con la compra</a></div>
+  </main>
+</div></section>

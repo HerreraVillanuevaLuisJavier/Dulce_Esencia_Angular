@@ -7,12 +7,26 @@
         <p>Usa las credenciales de demostración para acceder a tu cuenta de prueba.</p>
       </div>
 
-      <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
+      <form class="login-form" (ngSubmit)="login(loginForm)" #loginForm="ngForm" novalidate>
         <div class="campo-formulario">
           <label for="login-email">Correo electrónico</label>
-          <input id="login-email" name="email" type="email" class="form-control" [(ngModel)]="email" required email />
-          @if (loginForm.submitted && !email) {
-            <small class="form-error">El correo es obligatorio.</small>
+          <input
+            id="login-email"
+            name="email"
+            type="email"
+            class="form-control"
+            [(ngModel)]="email"
+            #emailControl="ngModel"
+            required
+            email
+            [attr.aria-invalid]="emailControl.invalid && (emailControl.touched || loginForm.submitted)"
+            [attr.aria-describedby]="emailControl.invalid && (emailControl.touched || loginForm.submitted) ? 'login-email-error' : null"
+          />
+          @if (emailControl.errors?.['required'] && (emailControl.touched || loginForm.submitted)) {
+            <small id="login-email-error" class="form-error" role="alert">El correo es obligatorio.</small>
+          }
+          @if (emailControl.errors?.['email'] && (emailControl.touched || loginForm.submitted)) {
+            <small id="login-email-error" class="form-error" role="alert">Escribe un correo electrónico válido.</small>
           }
         </div>
 
@@ -25,19 +39,22 @@
               name="password"
               [type]="showPassword ? 'text' : 'password'"
               [(ngModel)]="password"
+              #passwordControl="ngModel"
               required
+              [attr.aria-invalid]="passwordControl.invalid && (passwordControl.touched || loginForm.submitted)"
+              [attr.aria-describedby]="passwordControl.invalid && (passwordControl.touched || loginForm.submitted) ? 'login-password-error' : null"
             />
             <button class="btn password-toggle" type="button" (click)="showPassword = !showPassword">
               {{ showPassword ? 'Ocultar' : 'Mostrar' }}
             </button>
           </div>
-          @if (loginForm.submitted && !password) {
-            <small class="form-error">La contraseña es obligatoria.</small>
+          @if (passwordControl.errors?.['required'] && (passwordControl.touched || loginForm.submitted)) {
+            <small id="login-password-error" class="form-error" role="alert">La contraseña es obligatoria.</small>
           }
         </div>
 
         @if (errorMessage) {
-          <div class="message error-message">{{ errorMessage }}</div>
+          <div class="message error-message" role="alert">{{ errorMessage }}</div>
         }
 
         <button class="btn boton boton-principal w-100" type="submit">Iniciar sesión</button>

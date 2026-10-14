@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { CarritoService } from '../../../core/services/carrito.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class NavbarComponent {
   readonly router = inject(Router);
   readonly authService = inject(AuthService);
+  readonly carrito = inject(CarritoService);
 
   logout(): void {
     this.authService.logout();
