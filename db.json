@@ -150,6 +150,31 @@
       "total": 65,
       "estado": "pendiente",
       "id": 3
+    },
+    {
+      "fechaCreacion": "2026-10-14T03:25:29.917Z",
+      "nombreCliente": "Nicolas Suarez",
+      "correoCliente": "U24238616@utp.edu.pe",
+      "tipoEntrega": "recojo",
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Torta de chocolate",
+          "precioUnitario": 65,
+          "cantidad": 1,
+          "subtotal": 65
+        },
+        {
+          "productoId": 5,
+          "nombre": "Cheesecake de frutos rojos",
+          "precioUnitario": 72,
+          "cantidad": 1,
+          "subtotal": 72
+        }
+      ],
+      "total": 137,
+      "estado": "pendiente",
+      "id": 4
     }
   ]
 }
