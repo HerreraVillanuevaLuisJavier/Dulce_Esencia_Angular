@@ -2,20 +2,43 @@
   <div class="contenedor">
     <div class="card-usuario card">
       <p class="etiqueta-seccion">Mi cuenta</p>
-      @if (authService.isAuthenticated()) {
-        <h2>Bienvenido, {{ authService.currentUser()?.name }}</h2>
-        <p>Tu sesión está activa y puedes acceder al panel administrativo.</p>
+      @if (authService.currentUser()?.role === 'admin') {
+        <h2>Sesión de administrador activa</h2>
+        <p>Esta cuenta tiene acceso al panel administrativo.</p>
         <div class="mi-cuenta-actions">
           <a class="btn boton boton-principal" routerLink="/dashboard">Ir al dashboard</a>
-          <a class="btn boton boton-secundario" routerLink="/">Volver al inicio</a>
+          <button class="btn boton boton-secundario" type="button" (click)="logout()">Cerrar sesión</button>
+        </div>
+      } @else if (authService.currentUser()?.role === 'cliente') {
+        <h2>Bienvenido, {{ authService.currentUser()?.name }}</h2>
+        <p>Has iniciado sesión en tu cuenta de cliente.</p>
+        <div class="mi-cuenta-actions">
+          <a class="btn boton boton-secundario" routerLink="/tienda">Ir a la tienda</a>
+          <button class="btn boton boton-secundario" type="button" (click)="logout()">Cerrar sesión</button>
         </div>
       } @else {
-        <h2>Inicia sesión para continuar</h2>
-        <p>Accede a tu cuenta de Dulce Esencia y revisa tus pedidos.</p>
-        <div class="mi-cuenta-actions">
-          <a class="btn boton boton-principal" routerLink="/login">Iniciar sesión</a>
-          <a class="btn boton boton-secundario" routerLink="/">Volver al inicio</a>
-        </div>
+        <h2>Acceso para clientes</h2>
+        <p>Inicia sesión para consultar tu cuenta de cliente.</p>
+        <form class="mi-cuenta-form" #clienteForm="ngForm" (ngSubmit)="loginCliente(clienteForm)" novalidate>
+          <div class="campo-formulario">
+            <label for="cuenta-email">Correo electrónico</label>
+            <input id="cuenta-email" name="email" type="email" class="form-control" [(ngModel)]="email" #emailControl="ngModel" required email autocomplete="email" />
+            @if (emailControl.invalid && (emailControl.touched || clienteForm.submitted)) {
+              <small class="form-error" role="alert">Ingresa un correo electrónico valido.</small>
+            }
+          </div>
+          <div class="campo-formulario">
+            <label for="cuenta-password">Contraseña</label>
+            <input id="cuenta-password" name="password" type="password" class="form-control" [(ngModel)]="password" #passwordControl="ngModel" required autocomplete="current-password" />
+            @if (passwordControl.invalid && (passwordControl.touched || clienteForm.submitted)) {
+              <small class="form-error" role="alert">La contraseña es obligatoria.</small>
+            }
+          </div>
+          @if (errorMessage) {
+            <div class="message error-message" role="alert">{{ errorMessage }}</div>
+          }
+          <button class="btn boton boton-principal" type="submit">Iniciar sesión como cliente</button>
+        </form>
       }
     </div>
   </div>

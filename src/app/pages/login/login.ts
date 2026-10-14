@@ -14,8 +14,8 @@ export class LoginPage {
   readonly authService = inject(AuthService);
   readonly router = inject(Router);
 
-  email = 'cliente@dulceesencia.com';
-  password = 'Dulce123!';
+  email = '';
+  password = '';
   showPassword = false;
   errorMessage = '';
 
@@ -27,7 +27,7 @@ export class LoginPage {
       return;
     }
 
-    const isValid = this.authService.login(this.email, this.password);
+    const isValid = this.authService.loginAdmin(this.email, this.password);
 
     if (!isValid) {
       this.errorMessage = 'Credenciales incorrectas. Intenta nuevamente.';

@@ -132,6 +132,24 @@
       "total": 60,
       "estado": "pendiente",
       "id": 2
+    },
+    {
+      "fechaCreacion": "2026-10-14T01:53:57.054Z",
+      "nombreCliente": "Nicolas Suarez",
+      "correoCliente": "U24238616@utp.edu.pe",
+      "tipoEntrega": "recojo",
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Torta de chocolate",
+          "precioUnitario": 65,
+          "cantidad": 1,
+          "subtotal": 65
+        }
+      ],
+      "total": 65,
+      "estado": "pendiente",
+      "id": 3
     }
   ]
 }

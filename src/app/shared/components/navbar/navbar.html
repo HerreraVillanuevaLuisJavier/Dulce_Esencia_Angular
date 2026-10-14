@@ -16,8 +16,11 @@
       <a routerLink="/carrito" routerLinkActive="active-link">Carrito ({{ carrito.unidades() }})</a>
       <a routerLink="/contacto" routerLinkActive="active-link">Contacto</a>
 
-      @if (authService.isAuthenticated()) {
+      @if (authService.currentUser()?.role === 'admin') {
         <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+        <button class="btn boton boton-secundario boton-nav" type="button" (click)="logout()">Cerrar sesión</button>
+      } @else if (authService.currentUser()?.role === 'cliente') {
+        <a routerLink="/mi-cuenta" routerLinkActive="active-link">Mi cuenta</a>
         <button class="btn boton boton-secundario boton-nav" type="button" (click)="logout()">Cerrar sesión</button>
       } @else {
         <a routerLink="/mi-cuenta" routerLinkActive="active-link">Mi cuenta</a>
